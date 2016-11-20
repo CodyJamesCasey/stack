@@ -159,6 +159,7 @@ canvas.addEventListener('mousemove', (event) => {
 });
 
 canvas.addEventListener('mousedown', () => {
+  if (win || lose) { return; }
   let x;
   let y;
 
@@ -312,7 +313,7 @@ window.setInterval(() => {
       },
       render: {
         sprite: {
-          texture: Assets.endLose.asset,
+          texture: Assets.endLoss.asset,
           xScale: 13,
           yScale: 13,
         }
@@ -324,6 +325,16 @@ window.setInterval(() => {
   if (!startSink) {
     return;
   }
+
+  const stillAlive = engine.world.bodies.filter(body => body.label === 'game-shape').some((body) => {
+    return !body.isStatic;
+  });
+
+  if (!stillAlive) {
+    lose = true;
+    return;
+  }
+
   engine.world.bodies.filter(body => body.label === 'game-shape' || body.label === 'floor').forEach((body) => {
     if (body.isStatic) {
       Body.setPosition(body, {
