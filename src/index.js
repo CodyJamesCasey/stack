@@ -4,6 +4,10 @@ import Assets from 'assets';
 import CanvasScreen from 'screen';
 
 import 'main.scss';
+const song = require('audio/13 - Just Out Of Reach.mp3');
+const audio = new Audio(song);
+audio.loop = true;
+audio.play();
 
 // module aliases
 const {
@@ -61,7 +65,7 @@ Events.on(engine, 'collisionActive', (collision) => {
   });
   if (found) {
     win = true;
-    engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
+    engine.world.bodies.filter(body => body.label.includes('game-shape')).forEach((body) => {
       World.remove(engine.world, body);
     });
   }
@@ -75,7 +79,7 @@ const goalCategory = 0x0010;
 
 const generateRandomItem = () => {
   const queueItems = Object.keys(Assets)
-    .filter(key => Assets[key].type.indexOf('queue-item') === 0)
+    .filter(key => Assets[key].type.includes('queue-item'))
     .map((key) => {
       return Assets[key];
     });
@@ -89,11 +93,66 @@ const itemQueue = [
   generateRandomItem(),
 ];
 
+const powerUpGrow = (body) => {
+  Body.scale(body, 3, 3);
+}
+
+const powerUpFail = (color) => {
+  engine.world.bodies.filter(body => body.label.includes(color) && body.label.indexOf('game-shape') === -1).forEach((body) => {
+    if (Math.floor(Math.random() * 2) == 0) {
+      World.remove(engine.world, body);
+    }
+  });
+}
+
+Events.on(engine, 'collisionStart', (collision) => {
+  collision.pairs.forEach((pair) => {
+    const { bodyA, bodyB } = pair;
+    let powerUpBody = null;
+    let colorBody = null;
+    if (bodyA.label.includes('power-up')
+      && bodyB.label.includes('queue-item')
+      && bodyB.label.indexOf('power-up') === -1) {
+      powerUpBody = bodyA;
+      colorBody = bodyB;
+    } else if (bodyB.label.includes('power-up')
+      && bodyA.label.includes('queue-item') === 0
+      && bodyA.label.indexOf('power-up') === -1) {
+      powerUpBody = bodyB;
+      colorBody = bodyA;
+    }
+
+    if (!powerUpBody || !colorBody) { return; }
+
+    if (powerUpBody.label.includes('magenta') && colorBody.label.includes('magenta')) {
+      if (colorBody.label.includes('grow')) {
+        powerUpGrow(colorBody);
+      }
+    } else if (powerUpBody.label.includes('cyan') && colorBody.label.includes('cyan')) {
+      if (colorBody.label.includes('grow')) {
+        powerUpGrow(colorBody);
+      }
+    } else if (powerUpBody.label.includes('yellow') && colorBody.label.includes('yellow')) {
+      if (colorBody.label.includes('grow')) {
+        powerUpGrow(colorBody);
+      }
+    } else {
+      let color = null;
+      if (colorBody.label.indexOf('magenta') > -1) { color = 'magenta'; }
+      if (colorBody.label.indexOf('cyan') > -1) { color = 'cyan'; }
+      if (colorBody.label.indexOf('yellow') > -1) { color = 'yellow'; }
+      powerUpFail(color);
+    }
+
+    World.remove(engine.world, powerUpBody);
+  });
+});
+
 const renderQueue = () => {
   const queueItemRender = [];
   let x = 90;
   const y = 90;
-  engine.world.bodies.filter(body => body.label.indexOf('queue-item') === 0).forEach((body) => {
+  engine.world.bodies.filter(body => body.label.includes('queue-item') && !body.label.includes('game-shape')).forEach((body) => {
     World.remove(engine.world, body);
   });
 
@@ -172,7 +231,7 @@ canvas.addEventListener('mousedown', () => {
   const queueItem = itemQueue.pop();
 
   const ball = Bodies.circle(x, y, 90, {
-    label: 'game-shape',
+    label: 'game-shape-' + queueItem.type,
     collisionFilter: {
       category: ballCategory,
       mask: wallCategory | ballCategory | goalCategory,
@@ -268,6 +327,7 @@ World.add(engine.world, Bodies.rectangle(540, 1920, 1080, 1, {
 }));
 
 Events.on(engine, 'collisionStart', (collision) => {
+
   if (startSink) { return; }
 
   const found = collision.pairs.some((pair) => {
@@ -326,7 +386,7 @@ window.setInterval(() => {
     return;
   }
 
-  const stillAlive = engine.world.bodies.filter(body => body.label === 'game-shape').some((body) => {
+  const stillAlive = engine.world.bodies.filter(body => body.label.includes('game-shape')).some((body) => {
     return !body.isStatic;
   });
 
@@ -335,7 +395,7 @@ window.setInterval(() => {
     return;
   }
 
-  engine.world.bodies.filter(body => body.label === 'game-shape' || body.label === 'floor').forEach((body) => {
+  engine.world.bodies.filter(body => body.label.includes('game-shape') || body.label === 'floor').forEach((body) => {
     if (body.isStatic) {
       Body.setPosition(body, {
         x: body.position.x,
@@ -344,13 +404,13 @@ window.setInterval(() => {
     }
   });
 
-  engine.world.bodies.filter(body => body.label === 'game-shape' || body.label === 'floor').forEach((body) => {
+  engine.world.bodies.filter(body => body.label.includes('game-shape') || body.label === 'floor').forEach((body) => {
     if (body.bounds.min.y > 1920) {
       body.isStatic = true;
     }
   });
 
-  engine.world.bodies.filter(body => body.label === 'game-shape' || body.label === 'floor').forEach((body) => {
+  engine.world.bodies.filter(body => body.label.includes('game-shape') || body.label === 'floor').forEach((body) => {
     if (body.bounds.min.y > 2500) {
       World.remove(engine.world, body);
     }

@@ -21,54 +21,54 @@ const endWinAsset = require('svg/endwin.svg');
 const assets = {
   circleYellow: {
     asset: circleYellowAsset,
-    type: 'queue-item-circle',
+    type: 'queue-item-circle-yellow',
   },
   circleCyan: {
     asset: circleCyanAsset,
-    type: 'queue-item-circle',
+    type: 'queue-item-circle-cyan',
   },
   circleMagenta: {
     asset: circleMagentaAsset,
-    type: 'queue-item-circle',
+    type: 'queue-item-circle-magenta',
   },
   squareYellow: {
     asset: squareYellowAsset,
-    type: 'queue-item-square',
+    type: 'queue-item-square-yellow',
   },
   squareCyan: {
     asset: squareCyanAsset,
-    type: 'queue-item-square',
+    type: 'queue-item-square-cyan',
   },
   squareMagenta: {
     asset: squareMagentaAsset,
-    type: 'queue-item-square',
+    type: 'queue-item-square-magenta',
   },
   triangleYellow: {
     asset: triangleYellowAsset,
-    type: 'queue-item-triangle',
+    type: 'queue-item-triangle-yellow',
   },
   triangleCyan: {
     asset: triangleCyanAsset,
-    type: 'queue-item-triangle',
+    type: 'queue-item-triangle-cyan',
   },
   triangleMagenta: {
     asset: triangleMagentaAsset,
-    type: 'queue-item-triangle',
+    type: 'queue-item-triangle-magenta',
   },
 
   yellowPowerUp: {
     asset: yellowPowerUpAsset,
-    type: 'queue-item-yellow-power-up-grow',
+    type: 'queue-item-power-up-grow-yellow',
   },
 
   cyanPowerUp: {
     asset: cyanPowerUpAsset,
-    type: 'queue-item-cyan-power-up-grow',
+    type: 'queue-item-power-up-grow-cyan',
   },
 
   magentaPowerUp: {
     asset: magentaPowerUpAsset,
-    type: 'queue-item-magenta-power-up-grow',
+    type: 'queue-item-power-up-grow-magenta',
   },
 
   line: {

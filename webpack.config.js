@@ -68,7 +68,7 @@ const common = {
         loader: 'url-loader?limit=8192',
       },
       {
-        test: /\.svg$/,
+        test: /\.(svg|mp3)$/,
         loader: 'file',
         include: PATHS.SRC
       },
