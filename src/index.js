@@ -1,27 +1,46 @@
 import Matter from "matter-js";
 
 // module aliases
-var Engine = Matter.Engine,
-    Render = Matter.Render,
-    World = Matter.World,
-    Bodies = Matter.Bodies;
+const {
+  Engine,
+  Render,
+  World,
+  Bodies,
+  Composites,
+  Common,
+} = Matter;
 
 // create an engine
-var engine = Engine.create();
+const engine = Engine.create();
 
 // create a renderer
-var render = Render.create({
+const render = Render.create({
     element: document.body,
-    engine: engine
+    engine,
 });
 
-// create two boxes and a ground
-var boxA = Bodies.rectangle(400, 200, 80, 80);
-var boxB = Bodies.rectangle(450, 50, 80, 80);
-var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
-// add all of the bodies to the world
-World.add(engine.world, [boxA, boxB, ground]);
+var stack = Composites.stack(50, 50, 12, 3, 0, 0, function(x, y) {
+  switch (Math.round(Common.random(0, 1))) {
+
+  case 0:
+    if (Common.random() < 0.8) {
+      return Bodies.rectangle(x, y, Common.random(20, 50), Common.random(20, 50));
+    } else {
+      return Bodies.rectangle(x, y, Common.random(80, 120), Common.random(20, 30));
+    }
+    break;
+  case 1:
+    return Bodies.polygon(x, y, Math.round(Common.random(1, 8)), Common.random(20, 50));
+  }
+});
+
+World.add(engine.world, stack);
+
+const renderOptions = render.options;
+renderOptions.wireframes = false;
+renderOptions.showAngleIndicator = false;
+
 
 // run the engine
 Engine.run(engine);
