@@ -1,6 +1,10 @@
-const yellowAsset = require('svg/yellow.svg');
-const cyanAsset = require('svg/cyan.svg');
-const magentaAsset = require('svg/magenta.svg');
+const circleYellowAsset = require('svg/yellow.svg');
+const circleCyanAsset = require('svg/cyan.svg');
+const circleMagentaAsset = require('svg/magenta.svg');
+
+const yellowPowerUpAsset = require('svg/ygrow');
+const cyanPowerUpAsset = require('svg/cgrow');
+const magentaPowerUpAsset = require('svg/mgrow');
 
 const lineAsset = require('svg/line.svg');
 const backgroundAsset = require('svg/background.svg');
@@ -18,7 +22,7 @@ const assets = {
     asset: circleMagentaAsset,
     type: 'queue-item-circle',
   },
-    squareYellow: {
+  squareYellow: {
     asset: squareYellowAsset,
     type: 'queue-item-square',
   },
@@ -41,6 +45,21 @@ const assets = {
   triangleMagenta: {
     asset: triangleMagentaAsset,
     type: 'queue-item-triangle',
+  },
+
+  yellowPowerUp: {
+    asset: yellowPowerUpAsset,
+    type: 'queue-item-yellow-power-up-grow',
+  },
+
+  cyanPowerUp: {
+    asset: cyanPowerUpAsset,
+    type: 'queue-item-cyan-power-up-grow',
+  },
+
+  magentaPowerUp: {
+    asset: magentaPowerUpAsset,
+    type: 'queue-item-magenta-power-up-grow',
   },
 
   line: {
