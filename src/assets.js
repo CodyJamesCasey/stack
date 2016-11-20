@@ -6,17 +6,41 @@ const lineAsset = require('svg/line.svg');
 const backgroundAsset = require('svg/background.svg');
 
 const assets = {
-  yellow: {
-    asset: yellowAsset,
-    type: 'queue-item',
+  circleYellow: {
+    asset: circleYellowAsset,
+    type: 'queue-item-circle',
   },
-  cyan: {
-    asset: cyanAsset,
-    type: 'queue-item',
+  circleCyan: {
+    asset: circleCyanAsset,
+    type: 'queue-item-circle',
   },
-  magenta: {
-    asset: magentaAsset,
-    type: 'queue-item',
+  circleMagenta: {
+    asset: circleMagentaAsset,
+    type: 'queue-item-circle',
+  },
+    squareYellow: {
+    asset: squareYellowAsset,
+    type: 'queue-item-square',
+  },
+  squareCyan: {
+    asset: squareCyanAsset,
+    type: 'queue-item-square',
+  },
+  squareMagenta: {
+    asset: squareMagentaAsset,
+    type: 'queue-item-square',
+  },
+    triangleYellow: {
+    asset: triangleYellowAsset,
+    type: 'queue-item-triangle',
+  },
+  triangleCyan: {
+    asset: triangleCyanAsset,
+    type: 'queue-item-triangle',
+  },
+  triangleMagenta: {
+    asset: triangleMagentaAsset,
+    type: 'queue-item-triangle',
   },
 
   line: {
