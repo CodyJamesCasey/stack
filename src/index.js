@@ -94,9 +94,11 @@ const itemQueue = [
 ];
 
 const powerUpGrow = (body) => {
-  Body.scale(body, 3, 3);
-  body.render.sprite.xScale = 3;
-  body.render.sprite.yScale = 3;
+  if (body.doneScaled) { return; }
+  body.doneScaled = true;
+  Body.scale(body, 2, 2);
+  body.render.sprite.xScale = 2;
+  body.render.sprite.yScale = 2;
 }
 
 const powerUpFail = (color) => {
@@ -124,7 +126,6 @@ Events.on(engine, 'collisionStart', (collision) => {
       colorBody = bodyA;
     }
 
-    console.log('A:', bodyA.label, 'B:', bodyB.label, powerUpBody, colorBody);
     if (!powerUpBody || !colorBody) { return; }
 
     if (powerUpBody.label.includes('magenta') && colorBody.label.includes('magenta')) {
