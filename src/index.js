@@ -58,11 +58,12 @@ Events.on(engine, 'collisionActive', (collision) => {
 
   const found = collision.pairs.some((pair) => {
     const { bodyA, bodyB } = pair;
-    if (bodyA.label === 'line' && bodyB.velocity.y <= 1 ||
-      bodyB.label === 'line' && bodyA.velocity.y <= 1) {
+    if (bodyA.label === 'line' && bodyB.velocity.y <= 2 ||
+      bodyB.label === 'line' && bodyA.velocity.y <= 2) {
       return true
     }
   });
+
   if (found) {
     win = true;
     engine.world.bodies.filter(body => body.label.includes('game-shape')).forEach((body) => {
@@ -103,11 +104,11 @@ const powerUpGrow = (body) => {
 }
 
 const powerUpFail = (color) => {
+  const deletedBodies = [];
   engine.world.bodies.filter(body => body.label.includes(color) && body.label.indexOf('game-shape') === -1).forEach((body) => {
-    if (Math.floor(Math.random() * 2) == 0) {
-      World.remove(engine.world, body);
-      console.log('punish');
-    }
+    deletedBodies.push(body);
+    World.remove(engine.world, body);
+    console.log('punish');
   });
 }
 
