@@ -204,8 +204,12 @@ World.add(engine.world, Bodies.rectangle(540, 960, 1080, 1920, {
     category: sceneryCategory,
   },
   render: {
-    fillStyle: 'red',
-  },
+    sprite: {
+      texture: Assets.background.asset,
+      xScale: 13,
+      yScale: 13,
+    }
+  }
 }));
 
 World.add(engine.world, Bodies.rectangle(540, 400, 1080, 10, {
