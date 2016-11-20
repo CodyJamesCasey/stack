@@ -1,19 +1,16 @@
-import Matter from "matter-js";
+import Matter from 'matter-js';
 
-import CanvasScreen from "screen";
+import CanvasScreen from 'screen';
 
 import 'main.scss';
 
 // module aliases
 const {
   Engine,
-  Render,
   World,
   Body,
   Bodies,
-  Composites,
   Common,
-  MouseConstraint,
 } = Matter;
 
 const canvasModel = {
@@ -21,9 +18,13 @@ const canvasModel = {
   width: 1080,
 };
 
+const defaultCategory = 0x0001;
+const ballCategory = 0x0002;
+const nextItemCategory = 0x0004;
+
 const canvas = document.getElementById('canvas');
-canvas.style.height = CanvasScreen.size.height + "px";
-canvas.style.width = CanvasScreen.size.width + "px";
+canvas.style.height = CanvasScreen.size.height + 'px';
+canvas.style.width = CanvasScreen.size.width + 'px';
 
 const engine = Engine.create({
   render: {
@@ -42,54 +43,68 @@ const engine = Engine.create({
 
 window.addEventListener('resize', () => {
   CanvasScreen.setNewCanvasScreen();
-  canvas.style.height = CanvasScreen.size.height + "px";
-  canvas.style.width = CanvasScreen.size.width + "px";
+  canvas.style.height = CanvasScreen.size.height + 'px';
+  canvas.style.width = CanvasScreen.size.width + 'px';
 });
 
 canvas.addEventListener('mousemove', (event) => {
-  const { offsetX, offsetY } = event;
+  const { offsetX } = event;
   const canvasRect = canvas.getBoundingClientRect();
 
   const xPos = canvasModel.width / (canvasRect.width / offsetX);
   const yPos = 200;
 
-  engine.world.bodies.filter(body => body.label === "next-item").forEach((body) => {
+  engine.world.bodies.filter(body => body.label === 'next-item').forEach((body) => {
     World.remove(engine.world, body);
   });
 
   World.add(engine.world, Bodies.circle(xPos, yPos, 50, {
     isStatic: true,
-    label: "next-item",
+    label: 'next-item',
+    collisionFilter: {
+      category: nextItemCategory,
+      mask: defaultCategory | nextItemCategory,
+    },
   }));
 });
 
 //add walls
 World.add(engine.world, Bodies.rectangle(0, 350, 1, 1920, {
   isStatic: true,
-  label: "wall",
+  label: 'wall',
+  collisionFilter: {
+    category: defaultCategory,
+  },
 }));
 
 World.add(engine.world, Bodies.rectangle(1920, 350, 1, 1920, {
   isStatic: true,
-  label: "wall",
+  label: 'wall',
+  collisionFilter: {
+    category: defaultCategory,
+  },
 }));
 
 //add bottom wall
-World.add(engine.world, Bodies.rectangle(0, 900, 1080, 1, { isStatic: true, label: "game-shape"}));
+World.add(engine.world, Bodies.rectangle(0, 900, 1080, 1, { isStatic: true, label: 'game-shape'}));
 
 
 
 window.setInterval(() => {
-  // const body = Bodies.rectangle(100, 0, Common.random(20, 50), Common.random(20, 50));
-  const body = Bodies.polygon(Common.random(20, 50), 0, 1, 50, {label: "game-shape"});
-  // MouseConstraint.create(engine, body);
+  const body = Bodies.circle(Common.random(20, 50), 0, 50, {
+    label: 'game-shape',
+    collisionFilter: {
+      category: ballCategory,
+      mask: defaultCategory | ballCategory,
+    },
+  });
   World.add(engine.world, body);
 }, 1000);
 
 
 //check for balls to be static and deleted
 window.setInterval(() => {
-  engine.world.bodies.filter(body => body.label === "game-shape").forEach((body) => {
+  engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
     if (body.isStatic) {
       Body.setPosition(body, {
         x: body.position.x,
@@ -98,13 +113,13 @@ window.setInterval(() => {
     }
   });
 
-  engine.world.bodies.filter(body => body.label === "game-shape").forEach((body) => {
+  engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
     if (body.bounds.min.y > 800) {
       body.isStatic = true;
     }
   });
 
-  engine.world.bodies.filter(body => body.label === "game-shape").forEach((body) => {
+  engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
     if (body.bounds.min.y > 1000) {
       World.remove(engine.world, body);
     }
