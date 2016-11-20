@@ -36,11 +36,13 @@ const engine = Engine.create({
   }
 });
 
-window.addEventListener('resize', () => {
+function resizeCanvasDisplay() {
   CanvasScreen.setNewCanvasScreen();
   canvas.style.height = CanvasScreen.size.height + 'px';
   canvas.style.width = CanvasScreen.size.width + 'px';
-});
+}
+
+window.addEventListener('resize', resizeCanvasDisplay);
 
 const wallCategory = 0x0001;
 const ballCategory = 0x0002;
@@ -97,7 +99,6 @@ const renderQueue = () => {
 
   World.add(engine.world, queueItemRender);
 }
-renderQueue();
 
 canvas.addEventListener('mousemove', (event) => {
   const { offsetX } = event;
@@ -170,10 +171,6 @@ canvas.addEventListener('mousedown', () => {
 
   World.add(engine.world, [ball, newNextItem]);
 
-  // Body.scale(ball, 2, 2);
-  // ball.render.sprite.xScale = 1;
-  // ball.render.sprite.yScale = 1;
-
   itemQueue.unshift(generateRandomItem());
   renderQueue();
 });
@@ -191,9 +188,9 @@ World.add(engine.world, Bodies.rectangle(540, 960, 1080, 1920, {
   },
 }));
 
-World.add(engine.world, Bodies.rectangle(540, 500, 1080, 10, {
+World.add(engine.world, Bodies.rectangle(540, 400, 1080, 10, {
   isStatic: true,
-  label: 'wall',
+  label: 'line',
   collisionFilter: {
     category: sceneryCategory,
   },
@@ -253,3 +250,20 @@ window.setInterval(() => {
 }, 50);
 
 Engine.run(engine);
+resizeCanvasDisplay();
+const newNextItem = Bodies.circle(540, 200, 90, {
+  isStatic: true,
+  label: 'next-item',
+  collisionFilter: {
+    category: nextItemCategory,
+    mask: wallCategory | nextItemCategory,
+  },
+  render: {
+    sprite: {
+      texture: itemQueue[itemQueue.length - 1].asset,
+    }
+  }
+});
+
+World.add(engine.world, newNextItem);
+renderQueue();
