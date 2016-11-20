@@ -418,7 +418,7 @@ window.setInterval(() => {
       World.remove(engine.world, body);
     }
   });
-}, 60);
+}, 40);
 
 Engine.run(engine);
 resizeCanvasDisplay();
