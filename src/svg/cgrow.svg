@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 192.9 192.9" style="enable-background:new 0 0 192.9 192.9;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:url(#SVGID_1_);stroke-width:11;stroke-miterlimit:10;}
+	.st1{fill:url(#SVGID_2_);}
+</style>
+<title>cgrow</title>
+<g id="Layer_1_1_">
+	
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="164.6334" y1="165.7534" x2="28.2466" y2="29.3666" gradientTransform="matrix(1 0 0 -1 0 194)">
+		<stop  offset="0" style="stop-color:#00FFC5"/>
+		<stop  offset="1" style="stop-color:#0097FF"/>
+	</linearGradient>
+	<circle class="st0" cx="96.4" cy="96.4" r="90.9"/>
+	<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="120.84" y1="72.03" x2="72.03" y2="120.84">
+		<stop  offset="0" style="stop-color:#00FFC5"/>
+		<stop  offset="1" style="stop-color:#0097FF"/>
+	</linearGradient>
+	<path class="st1" d="M54.6,103.2V89.7h35V54.5h13.7v35.2h35v13.5h-35v35.2H89.6v-35.2H54.6z"/>
+</g>
+</svg>
