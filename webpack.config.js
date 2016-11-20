@@ -3,7 +3,6 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 
-const DashboardPlugin = require('webpack-dashboard/plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -47,11 +46,16 @@ const common = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         loader: 'babel',
         query: {
           cacheDirectory: true,
-          presets: ['es2015', 'stage-0'],
+          presets: ['react', 'es2015', 'stage-0'],
+          'env': {
+            'development': {
+              'presets': ['react-hmre']
+            }
+          }
         },
         include: PATHS.SRC,
       },
@@ -76,7 +80,7 @@ const common = {
   },
 };
 
-if(true) {
+if(TARGET === 'start' || !TARGET) {
   module.exports = merge(common, {
     devtool: 'eval-source-map',
     devServer: {
@@ -93,8 +97,11 @@ if(true) {
       port: process.env.PORT
     },
     plugins: [
-      new DashboardPlugin(),
       new webpack.HotModuleReplacementPlugin(),
     ]
   });
+}
+
+if(TARGET === 'build') {
+  module.exports = merge(common, {});
 }

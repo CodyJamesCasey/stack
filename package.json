@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --define process.env.NODE_ENV='\"production\"' --optimize-minimize --optimize-dedupe --progress --colors",
-    "start": "webpack-dashboard --define process.env.NODE_ENV='\"development\"' -- webpack-dev-server --config",
+    "start": "webpack-dev-server --define process.env.NODE_ENV='\"development\"' --config",
     "test": "test",
     "lint": "eslint . --ext .js --ignore-path .gitignore --cache"
   },
@@ -49,7 +49,6 @@
     "sass-loader": "^4.0.2",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.3",
-    "webpack-dashboard": "^0.2.0",
     "webpack-dev-server": "^1.16.2",
     "webpack-merge": "^0.17.0"
   }
