@@ -8,10 +8,15 @@ import 'main.scss';
 // module aliases
 const {
   Engine,
+  Events,
   World,
   Body,
   Bodies,
 } = Matter;
+
+let win = false;
+let lose = false;
+let startSink = false;
 
 const canvasModel = {
   height: 1920,
@@ -21,6 +26,14 @@ const canvasModel = {
 const canvas = document.getElementById('canvas');
 canvas.style.height = CanvasScreen.size.height + 'px';
 canvas.style.width = CanvasScreen.size.width + 'px';
+
+function resizeCanvasDisplay() {
+  CanvasScreen.setNewCanvasScreen();
+  canvas.style.height = CanvasScreen.size.height + 'px';
+  canvas.style.width = CanvasScreen.size.width + 'px';
+}
+
+window.addEventListener('resize', resizeCanvasDisplay);
 
 const engine = Engine.create({
   render: {
@@ -36,18 +49,25 @@ const engine = Engine.create({
   }
 });
 
-function resizeCanvasDisplay() {
-  CanvasScreen.setNewCanvasScreen();
-  canvas.style.height = CanvasScreen.size.height + 'px';
-  canvas.style.width = CanvasScreen.size.width + 'px';
-}
-
-window.addEventListener('resize', resizeCanvasDisplay);
+Events.on(engine, 'collisionActive', (collision) => {
+  const found = collision.pairs.some((pair) => {
+    const { bodyA, bodyB } = pair;
+    if (bodyA.label === 'line' && bodyB.velocity.y <= 1 ||
+      bodyB.label === 'line' && bodyA.velocity.y <= 1) {
+      return true
+    }
+  });
+  if (found) {
+    win = true;
+    console.log(win);
+  }
+});
 
 const wallCategory = 0x0001;
 const ballCategory = 0x0002;
 const nextItemCategory = 0x0004;
 const sceneryCategory = 0x0008;
+const goalCategory = 0x0010;
 
 const generateRandomItem = () => {
   const queueItems = Object.keys(Assets)
@@ -145,7 +165,7 @@ canvas.addEventListener('mousedown', () => {
     label: 'game-shape',
     collisionFilter: {
       category: ballCategory,
-      mask: wallCategory | ballCategory,
+      mask: wallCategory | ballCategory | goalCategory,
     },
     render: {
       sprite: {
@@ -192,8 +212,9 @@ World.add(engine.world, Bodies.rectangle(540, 400, 1080, 10, {
   isStatic: true,
   label: 'line',
   collisionFilter: {
-    category: sceneryCategory,
+    category: goalCategory,
   },
+  isSensor: true,
   render: {
     sprite: {
       texture: Assets.line.asset,
@@ -217,17 +238,34 @@ World.add(engine.world, Bodies.rectangle(1080, 960, 1, 1920, {
   },
 }));
 
-//add bottom wall
+//add floor
 World.add(engine.world, Bodies.rectangle(540, 1920, 1080, 1, {
   isStatic: true,
-  label: 'game-shape',
+  label: 'floor',
   collisionFilter: {
     category: wallCategory,
   },
 }));
 
+Events.on(engine, 'collisionStart', (collision) => {
+  if (startSink) { return; }
+
+  const found = collision.pairs.some((pair) => {
+    const { bodyA, bodyB } = pair;
+    if (bodyA.label === 'floor' || bodyB.label === 'floor') {
+      return true
+    }
+  });
+  if (found) {
+    startSink = true;
+  }
+});
+
 window.setInterval(() => {
-  engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
+  if (!startSink) {
+    return;
+  }
+  engine.world.bodies.filter(body => body.label === 'game-shape' || body.label === 'floor').forEach((body) => {
     if (body.isStatic) {
       Body.setPosition(body, {
         x: body.position.x,
@@ -236,13 +274,13 @@ window.setInterval(() => {
     }
   });
 
-  engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
+  engine.world.bodies.filter(body => body.label === 'game-shape' || body.label === 'floor').forEach((body) => {
     if (body.bounds.min.y > 1920) {
       body.isStatic = true;
     }
   });
 
-  engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
+  engine.world.bodies.filter(body => body.label === 'game-shape' || body.label === 'floor').forEach((body) => {
     if (body.bounds.min.y > 2500) {
       World.remove(engine.world, body);
     }
