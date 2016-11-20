@@ -70,22 +70,15 @@ window.setInterval(() => {
 }, 50);
 
 
-
-        $.get('./src/svg/svg.svg').done(function(data) {
-            var vertexSets = [],
-                color = Common.choose(['#556270', '#4ECDC4', '#C7F464', '#FF6B6B', '#C44D58']);
-
-            $(data).find('path').each(function(i, path) {
-                vertexSets.push(Svg.pathToVertices(path, 30));
-            });
-
-            World.add(world, Bodies.fromVertices(400, 80, vertexSets, {
-                render: {
-                    fillStyle: color,
-                    strokeStyle: color
-                }
-            }, true));
-        });
+const svg = require('svg/svg.svg');
+World.add(engine.world, Bodies.circle(450, 50, 17, {
+  label: "game-shape",
+  render: {
+    sprite: {
+      texture: svg,
+    }
+  }
+}, true));
 
 
 // run the engine

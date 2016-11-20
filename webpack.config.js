@@ -68,6 +68,11 @@ const common = {
         loader: 'url-loader?limit=8192',
       },
       {
+        test: /\.svg$/,
+        loader: 'file',
+        include: PATHS.SRC
+      },
+      {
         test: /\.ttf(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'url',
         query: {
