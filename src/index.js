@@ -95,6 +95,8 @@ const itemQueue = [
 
 const powerUpGrow = (body) => {
   Body.scale(body, 3, 3);
+  body.render.sprite.xScale = 3;
+  body.render.sprite.yScale = 3;
 }
 
 const powerUpFail = (color) => {
@@ -116,24 +118,25 @@ Events.on(engine, 'collisionStart', (collision) => {
       powerUpBody = bodyA;
       colorBody = bodyB;
     } else if (bodyB.label.includes('power-up')
-      && bodyA.label.includes('queue-item') === 0
+      && bodyA.label.includes('queue-item')
       && bodyA.label.indexOf('power-up') === -1) {
       powerUpBody = bodyB;
       colorBody = bodyA;
     }
 
+    console.log('A:', bodyA.label, 'B:', bodyB.label, powerUpBody, colorBody);
     if (!powerUpBody || !colorBody) { return; }
 
     if (powerUpBody.label.includes('magenta') && colorBody.label.includes('magenta')) {
-      if (colorBody.label.includes('grow')) {
+      if (powerUpBody.label.includes('grow')) {
         powerUpGrow(colorBody);
       }
     } else if (powerUpBody.label.includes('cyan') && colorBody.label.includes('cyan')) {
-      if (colorBody.label.includes('grow')) {
+      if (powerUpBody.label.includes('grow')) {
         powerUpGrow(colorBody);
       }
     } else if (powerUpBody.label.includes('yellow') && colorBody.label.includes('yellow')) {
-      if (colorBody.label.includes('grow')) {
+      if (powerUpBody.label.includes('grow')) {
         powerUpGrow(colorBody);
       }
     } else {
