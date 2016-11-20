@@ -243,11 +243,11 @@ window.setInterval(() => {
   });
 
   engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
-    if (body.bounds.min.y > 2200) {
+    if (body.bounds.min.y > 2500) {
       World.remove(engine.world, body);
     }
   });
-}, 50);
+}, 60);
 
 Engine.run(engine);
 resizeCanvasDisplay();
