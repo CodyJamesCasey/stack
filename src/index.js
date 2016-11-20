@@ -50,6 +50,8 @@ const engine = Engine.create({
 });
 
 Events.on(engine, 'collisionActive', (collision) => {
+  if (win || lose) { return; }
+
   const found = collision.pairs.some((pair) => {
     const { bodyA, bodyB } = pair;
     if (bodyA.label === 'line' && bodyB.velocity.y <= 1 ||
@@ -59,7 +61,9 @@ Events.on(engine, 'collisionActive', (collision) => {
   });
   if (found) {
     win = true;
-    console.log(win);
+    engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
+      World.remove(engine.world, body);
+    });
   }
 });
 
@@ -71,7 +75,7 @@ const goalCategory = 0x0010;
 
 const generateRandomItem = () => {
   const queueItems = Object.keys(Assets)
-    .filter(key => Assets[key].type === 'queue-item')
+    .filter(key => Assets[key].type.indexOf('queue-item') === 0)
     .map((key) => {
       return Assets[key];
     });
@@ -89,7 +93,7 @@ const renderQueue = () => {
   const queueItemRender = [];
   let x = 90;
   const y = 90;
-  engine.world.bodies.filter(body => body.label === 'queue-item').forEach((body) => {
+  engine.world.bodies.filter(body => body.label.indexOf('queue-item') === 0).forEach((body) => {
     World.remove(engine.world, body);
   });
 
@@ -98,7 +102,7 @@ const renderQueue = () => {
 
     const body = Bodies.circle(x, y, 90, {
       isStatic: true,
-      label: 'queue-item',
+      label: item.type,
       collisionFilter: {
         category: sceneryCategory,
       },
@@ -121,6 +125,7 @@ const renderQueue = () => {
 }
 
 canvas.addEventListener('mousemove', (event) => {
+  if (win || lose) { return; }
   const { offsetX } = event;
   const canvasRect = canvas.getBoundingClientRect();
 
@@ -276,6 +281,46 @@ Events.on(engine, 'collisionStart', (collision) => {
 });
 
 window.setInterval(() => {
+  if (win) {
+    engine.world.bodies.filter(body => body.label === 'end-win').forEach((body) => {
+      World.remove(engine.world, body);
+    });
+    World.add(engine.world, Bodies.rectangle(540, 960, 1080, 1920, {
+      isStatic: true,
+      label: 'end-win',
+      collisionFilter: {
+        category: sceneryCategory,
+      },
+      render: {
+        sprite: {
+          texture: Assets.endWin.asset,
+          xScale: 13,
+          yScale: 13,
+        }
+      }
+    }));
+    return;
+  } else if (lose) {
+    engine.world.bodies.filter(body => body.label === 'end-lose').forEach((body) => {
+      World.remove(engine.world, body);
+    });
+    World.add(engine.world, Bodies.rectangle(540, 960, 1080, 1920, {
+      isStatic: true,
+      label: 'end-lose',
+      collisionFilter: {
+        category: sceneryCategory,
+      },
+      render: {
+        sprite: {
+          texture: Assets.endLose.asset,
+          xScale: 13,
+          yScale: 13,
+        }
+      }
+    }));
+    return;
+  }
+
   if (!startSink) {
     return;
   }

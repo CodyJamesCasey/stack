@@ -8,12 +8,15 @@ const triangleYellowAsset = require('svg/ytri.svg');
 const triangleCyanAsset = require('svg/ctri.svg');
 const triangleMagentaAsset = require('svg/mtri.svg');
 
-const yellowPowerUpAsset = require('svg/ygrow');
-const cyanPowerUpAsset = require('svg/cgrow');
-const magentaPowerUpAsset = require('svg/mgrow');
+const yellowPowerUpAsset = require('svg/ygrow.svg');
+const cyanPowerUpAsset = require('svg/cgrow.svg');
+const magentaPowerUpAsset = require('svg/mgrow.svg');
 
 const lineAsset = require('svg/line.svg');
 const backgroundAsset = require('svg/background.svg');
+
+const endLossAsset = require('svg/endloss.svg');
+const endWinAsset = require('svg/endwin.svg');
 
 const assets = {
   circleYellow: {
@@ -40,7 +43,7 @@ const assets = {
     asset: squareMagentaAsset,
     type: 'queue-item-square',
   },
-    triangleYellow: {
+  triangleYellow: {
     asset: triangleYellowAsset,
     type: 'queue-item-triangle',
   },
@@ -74,6 +77,14 @@ const assets = {
   },
   background: {
     asset: backgroundAsset,
+    type: 'scenery',
+  },
+  endLoss: {
+    asset: endLossAsset,
+    type: 'scenery',
+  },
+  endWin: {
+    asset: endWinAsset,
     type: 'scenery',
   }
 }
