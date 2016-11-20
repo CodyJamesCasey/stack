@@ -125,6 +125,8 @@ canvas.addEventListener('mousemove', (event) => {
   const canvasRect = canvas.getBoundingClientRect();
 
   const xPos = canvasModel.width / (canvasRect.width / offsetX);
+  if (xPos <= 135 || xPos >= 945) { return; }
+
   const yPos = 200;
 
   engine.world.bodies.filter(body => body.label === 'next-item').forEach((body) => {
