@@ -1,0 +1,25 @@
+@import "~normalize.css/normalize.css";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Caveat Brush', cursive;
+  font-family: 'Boogaloo', cursive;
+}
+
+#root {
+  align-items: center;
+  background-color: black;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  position: relative;
+  width: 100vw;
+}
+
+#canvas {
+  height: 56.25%;
+  width: 100%;
+}
