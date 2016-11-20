@@ -225,7 +225,7 @@ canvas.addEventListener('mousemove', (event) => {
 });
 
 let clickSuspend = false;
-canvas.addEventListener('mousedown', () => {
+window.addEventListener('mousedown', () => {
   if (win || lose || clickSuspend) { return; }
   clickSuspend = true;
   let x;
