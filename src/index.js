@@ -42,9 +42,10 @@ window.addEventListener('resize', () => {
   canvas.style.width = CanvasScreen.size.width + 'px';
 });
 
-const defaultCategory = 0x0001;
+const wallCategory = 0x0001;
 const ballCategory = 0x0002;
 const nextItemCategory = 0x0004;
+const sceneryCategory = 0x0008;
 
 const generateRandomItem = () => {
   const queueItems = Object.keys(Assets)
@@ -59,7 +60,44 @@ const itemQueue = [
   generateRandomItem(),
   generateRandomItem(),
   generateRandomItem(),
+  generateRandomItem(),
 ];
+
+const renderQueue = () => {
+  const queueItemRender = [];
+  let x = 90;
+  const y = 90;
+  engine.world.bodies.filter(body => body.label === 'queue-item').forEach((body) => {
+    World.remove(engine.world, body);
+  });
+
+  itemQueue.forEach((item, index) => {
+    if (index === itemQueue.length - 1) { return; }
+
+    const body = Bodies.circle(x, y, 90, {
+      isStatic: true,
+      label: 'queue-item',
+      collisionFilter: {
+        category: sceneryCategory,
+      },
+      render: {
+        sprite: {
+          texture: item.asset,
+        }
+      }
+    });
+    Body.scale(body, 0.5, 0.5);
+    body.render.sprite.xScale = 0.5;
+    body.render.sprite.yScale = 0.5;
+
+    queueItemRender.push(body);
+
+    x += 90;
+  });
+
+  World.add(engine.world, queueItemRender);
+}
+renderQueue();
 
 canvas.addEventListener('mousemove', (event) => {
   const { offsetX } = event;
@@ -78,7 +116,7 @@ canvas.addEventListener('mousemove', (event) => {
     label: 'next-item',
     collisionFilter: {
       category: nextItemCategory,
-      mask: defaultCategory | nextItemCategory,
+      mask: wallCategory | nextItemCategory,
     },
     render: {
       sprite: {
@@ -106,7 +144,7 @@ canvas.addEventListener('mousedown', () => {
     label: 'game-shape',
     collisionFilter: {
       category: ballCategory,
-      mask: defaultCategory | ballCategory,
+      mask: wallCategory | ballCategory,
     },
     render: {
       sprite: {
@@ -121,7 +159,7 @@ canvas.addEventListener('mousedown', () => {
     label: 'next-item',
     collisionFilter: {
       category: nextItemCategory,
-      mask: defaultCategory | nextItemCategory,
+      mask: wallCategory | nextItemCategory,
     },
     render: {
       sprite: {
@@ -132,15 +170,45 @@ canvas.addEventListener('mousedown', () => {
 
   World.add(engine.world, [ball, newNextItem]);
 
+  // Body.scale(ball, 2, 2);
+  // ball.render.sprite.xScale = 1;
+  // ball.render.sprite.yScale = 1;
+
   itemQueue.unshift(generateRandomItem());
+  renderQueue();
 });
 
-//add walls
+//add walls and scenery
+
+World.add(engine.world, Bodies.rectangle(540, 960, 1080, 1920, {
+  isStatic: true,
+  label: 'background',
+  collisionFilter: {
+    category: sceneryCategory,
+  },
+  render: {
+    fillStyle: 'red',
+  },
+}));
+
+World.add(engine.world, Bodies.rectangle(540, 500, 1080, 10, {
+  isStatic: true,
+  label: 'wall',
+  collisionFilter: {
+    category: sceneryCategory,
+  },
+  render: {
+    sprite: {
+      texture: Assets.line.asset,
+    }
+  }
+}));
+
 World.add(engine.world, Bodies.rectangle(0, 960, 1, 1920, {
   isStatic: true,
   label: 'wall',
   collisionFilter: {
-    category: defaultCategory,
+    category: wallCategory,
   },
 }));
 
@@ -148,16 +216,16 @@ World.add(engine.world, Bodies.rectangle(1080, 960, 1, 1920, {
   isStatic: true,
   label: 'wall',
   collisionFilter: {
-    category: defaultCategory,
+    category: wallCategory,
   },
 }));
 
 //add bottom wall
-World.add(engine.world, Bodies.rectangle(0, 1920, 1080, 1, {
+World.add(engine.world, Bodies.rectangle(540, 1920, 1080, 1, {
   isStatic: true,
   label: 'game-shape',
   collisionFilter: {
-    category: defaultCategory,
+    category: wallCategory,
   },
 }));
 
