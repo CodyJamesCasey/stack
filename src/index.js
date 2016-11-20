@@ -144,6 +144,8 @@ canvas.addEventListener('mousemove', (event) => {
     render: {
       sprite: {
         texture: nextQueueItem.asset,
+        xScale: 1.19,
+        yScale: 1.19,
       }
     }
   });
@@ -172,6 +174,8 @@ canvas.addEventListener('mousedown', () => {
     render: {
       sprite: {
         texture: queueItem.asset,
+        xScale: 1.19,
+        yScale: 1.19,
       }
     }
   });
@@ -187,6 +191,8 @@ canvas.addEventListener('mousedown', () => {
     render: {
       sprite: {
         texture: nextQueueItem.asset,
+        xScale: 1.19,
+        yScale: 1.19,
       }
     }
   });
