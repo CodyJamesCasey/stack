@@ -222,6 +222,8 @@ World.add(engine.world, Bodies.rectangle(540, 400, 1080, 10, {
   render: {
     sprite: {
       texture: Assets.line.asset,
+      xScale: 4,
+      yScale: 4,
     }
   }
 }));
