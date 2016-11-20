@@ -1,6 +1,12 @@
 const circleYellowAsset = require('svg/yellow.svg');
 const circleCyanAsset = require('svg/cyan.svg');
 const circleMagentaAsset = require('svg/magenta.svg');
+const squareYellowAsset = require('svg/ysquare.svg');
+const squareCyanAsset = require('svg/csquare.svg');
+const squareMagentaAsset = require('svg/msquare.svg');
+const triangleYellowAsset = require('svg/ytri.svg');
+const triangleCyanAsset = require('svg/ctri.svg');
+const triangleMagentaAsset = require('svg/mtri.svg');
 
 const yellowPowerUpAsset = require('svg/ygrow');
 const cyanPowerUpAsset = require('svg/cgrow');
