@@ -99,12 +99,14 @@ const powerUpGrow = (body) => {
   Body.scale(body, 2, 2);
   body.render.sprite.xScale = 2;
   body.render.sprite.yScale = 2;
+  console.log('reward');
 }
 
 const powerUpFail = (color) => {
   engine.world.bodies.filter(body => body.label.includes(color) && body.label.indexOf('game-shape') === -1).forEach((body) => {
     if (Math.floor(Math.random() * 2) == 0) {
       World.remove(engine.world, body);
+      console.log('punish');
     }
   });
 }
@@ -221,8 +223,10 @@ canvas.addEventListener('mousemove', (event) => {
   World.add(engine.world, newNextItem);
 });
 
+let clickSuspend = false;
 canvas.addEventListener('mousedown', () => {
-  if (win || lose) { return; }
+  if (win || lose || clickSuspend) { return; }
+  clickSuspend = true;
   let x;
   let y;
 
@@ -270,6 +274,10 @@ canvas.addEventListener('mousedown', () => {
 
   itemQueue.unshift(generateRandomItem());
   renderQueue();
+
+  window.setTimeout(() => {
+    clickSuspend = false;
+  }, 500);
 });
 
 //add walls and scenery
