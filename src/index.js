@@ -1,5 +1,6 @@
 import Matter from 'matter-js';
 
+import Assets from 'assets';
 import CanvasScreen from 'screen';
 
 import 'main.scss';
@@ -17,10 +18,6 @@ const canvasModel = {
   width: 1080,
 };
 
-const defaultCategory = 0x0001;
-const ballCategory = 0x0002;
-const nextItemCategory = 0x0004;
-
 const canvas = document.getElementById('canvas');
 canvas.style.height = CanvasScreen.size.height + 'px';
 canvas.style.width = CanvasScreen.size.width + 'px';
@@ -36,7 +33,6 @@ const engine = Engine.create({
       showAngleIndicator: false,
       pixelRatio: 'auto'
     },
-    fillStyle: 'red',
   }
 });
 
@@ -45,6 +41,25 @@ window.addEventListener('resize', () => {
   canvas.style.height = CanvasScreen.size.height + 'px';
   canvas.style.width = CanvasScreen.size.width + 'px';
 });
+
+const defaultCategory = 0x0001;
+const ballCategory = 0x0002;
+const nextItemCategory = 0x0004;
+
+const generateRandomItem = () => {
+  const queueItems = Object.keys(Assets)
+    .filter(key => Assets[key].type === 'queue-item')
+    .map((key) => {
+      return Assets[key];
+    });
+  return queueItems[Math.floor(Math.random() * queueItems.length)];
+}
+
+const itemQueue = [
+  generateRandomItem(),
+  generateRandomItem(),
+  generateRandomItem(),
+];
 
 canvas.addEventListener('mousemove', (event) => {
   const { offsetX } = event;
@@ -57,14 +72,22 @@ canvas.addEventListener('mousemove', (event) => {
     World.remove(engine.world, body);
   });
 
-  World.add(engine.world, Bodies.circle(xPos, yPos, 50, {
+  const nextQueueItem = itemQueue[itemQueue.length - 1];
+  const newNextItem = Bodies.circle(xPos, yPos, 90, {
     isStatic: true,
     label: 'next-item',
     collisionFilter: {
       category: nextItemCategory,
       mask: defaultCategory | nextItemCategory,
     },
-  }));
+    render: {
+      sprite: {
+        texture: nextQueueItem.asset,
+      }
+    }
+  });
+
+  World.add(engine.world, newNextItem);
 });
 
 canvas.addEventListener('mousedown', () => {
@@ -77,24 +100,39 @@ canvas.addEventListener('mousedown', () => {
     World.remove(engine.world, body);
   });
 
-  const ball = Bodies.circle(x, y, 50, {
+  const queueItem = itemQueue.pop();
+
+  const ball = Bodies.circle(x, y, 90, {
     label: 'game-shape',
     collisionFilter: {
       category: ballCategory,
       mask: defaultCategory | ballCategory,
     },
+    render: {
+      sprite: {
+        texture: queueItem.asset,
+      }
+    }
   });
 
-  const newNextItem = Bodies.circle(x, y, 50, {
+  const nextQueueItem = itemQueue[itemQueue.length - 1];
+  const newNextItem = Bodies.circle(x, y, 90, {
     isStatic: true,
     label: 'next-item',
     collisionFilter: {
-      category: ballCategory,
-      mask: defaultCategory | ballCategory,
+      category: nextItemCategory,
+      mask: defaultCategory | nextItemCategory,
     },
+    render: {
+      sprite: {
+        texture: nextQueueItem.asset,
+      }
+    }
   });
 
   World.add(engine.world, [ball, newNextItem]);
+
+  itemQueue.unshift(generateRandomItem());
 });
 
 //add walls
