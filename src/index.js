@@ -10,7 +10,6 @@ const {
   World,
   Body,
   Bodies,
-  Common,
 } = Matter;
 
 const canvasModel = {
@@ -68,6 +67,36 @@ canvas.addEventListener('mousemove', (event) => {
   }));
 });
 
+canvas.addEventListener('mousedown', () => {
+  let x;
+  let y;
+
+  engine.world.bodies.filter(body => body.label === 'next-item').forEach((body) => {
+    x = body.position.x;
+    y = body.position.y;
+    World.remove(engine.world, body);
+  });
+
+  const ball = Bodies.circle(x, y, 50, {
+    label: 'game-shape',
+    collisionFilter: {
+      category: ballCategory,
+      mask: defaultCategory | ballCategory,
+    },
+  });
+
+  const newNextItem = Bodies.circle(x, y, 50, {
+    isStatic: true,
+    label: 'next-item',
+    collisionFilter: {
+      category: ballCategory,
+      mask: defaultCategory | ballCategory,
+    },
+  });
+
+  World.add(engine.world, [ball, newNextItem]);
+});
+
 //add walls
 World.add(engine.world, Bodies.rectangle(0, 350, 1, 1920, {
   isStatic: true,
@@ -77,7 +106,7 @@ World.add(engine.world, Bodies.rectangle(0, 350, 1, 1920, {
   },
 }));
 
-World.add(engine.world, Bodies.rectangle(1920, 350, 1, 1920, {
+World.add(engine.world, Bodies.rectangle(1080, 350, 1, 1920, {
   isStatic: true,
   label: 'wall',
   collisionFilter: {
@@ -87,20 +116,6 @@ World.add(engine.world, Bodies.rectangle(1920, 350, 1, 1920, {
 
 //add bottom wall
 World.add(engine.world, Bodies.rectangle(0, 900, 1080, 1, { isStatic: true, label: 'game-shape'}));
-
-
-
-window.setInterval(() => {
-  const body = Bodies.circle(Common.random(20, 50), 0, 50, {
-    label: 'game-shape',
-    collisionFilter: {
-      category: ballCategory,
-      mask: defaultCategory | ballCategory,
-    },
-  });
-  World.add(engine.world, body);
-}, 1000);
-
 
 //check for balls to be static and deleted
 window.setInterval(() => {
