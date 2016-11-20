@@ -98,7 +98,7 @@ canvas.addEventListener('mousedown', () => {
 });
 
 //add walls
-World.add(engine.world, Bodies.rectangle(0, 350, 1, 1920, {
+World.add(engine.world, Bodies.rectangle(0, 960, 1, 1920, {
   isStatic: true,
   label: 'wall',
   collisionFilter: {
@@ -106,7 +106,7 @@ World.add(engine.world, Bodies.rectangle(0, 350, 1, 1920, {
   },
 }));
 
-World.add(engine.world, Bodies.rectangle(1080, 350, 1, 1920, {
+World.add(engine.world, Bodies.rectangle(1080, 960, 1, 1920, {
   isStatic: true,
   label: 'wall',
   collisionFilter: {
@@ -115,9 +115,14 @@ World.add(engine.world, Bodies.rectangle(1080, 350, 1, 1920, {
 }));
 
 //add bottom wall
-World.add(engine.world, Bodies.rectangle(0, 900, 1080, 1, { isStatic: true, label: 'game-shape'}));
+World.add(engine.world, Bodies.rectangle(0, 1920, 1080, 1, {
+  isStatic: true,
+  label: 'game-shape',
+  collisionFilter: {
+    category: defaultCategory,
+  },
+}));
 
-//check for balls to be static and deleted
 window.setInterval(() => {
   engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
     if (body.isStatic) {
@@ -129,13 +134,13 @@ window.setInterval(() => {
   });
 
   engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
-    if (body.bounds.min.y > 800) {
+    if (body.bounds.min.y > 1920) {
       body.isStatic = true;
     }
   });
 
   engine.world.bodies.filter(body => body.label === 'game-shape').forEach((body) => {
-    if (body.bounds.min.y > 1000) {
+    if (body.bounds.min.y > 2200) {
       World.remove(engine.world, body);
     }
   });
