@@ -58,8 +58,8 @@ Events.on(engine, 'collisionActive', (collision) => {
 
   const found = collision.pairs.some((pair) => {
     const { bodyA, bodyB } = pair;
-    if (bodyA.label === 'line' && bodyB.velocity.y <= 2 ||
-      bodyB.label === 'line' && bodyA.velocity.y <= 2) {
+    if ((bodyA.label === 'line' && bodyB.velocity.y <= 3) ||
+      (bodyB.label === 'line' && bodyA.velocity.y <= 3)) {
       return true
     }
   });
