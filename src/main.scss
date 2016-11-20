@@ -5,14 +5,11 @@
 }
 
 body {
-  font-family: 'Caveat Brush', cursive;
-  font-family: 'Boogaloo', cursive;
-}
-
-#root {
   align-items: center;
   background-color: black;
   display: flex;
+  font-family: 'Caveat Brush', cursive;
+  font-family: 'Boogaloo', cursive;
   height: 100vh;
   justify-content: center;
   position: relative;
@@ -20,6 +17,7 @@ body {
 }
 
 #canvas {
-  height: 56.25%;
-  width: 100%;
+  cursor: none;
+  height: 100%;
+  width: 56.25%;
 }
